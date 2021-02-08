@@ -6,7 +6,7 @@ Flowframes Windows GUI for video interpolation - Supports DAIN NCNN as well as R
 
 ## Installation
 
-* Download the latest [release](https://github.com/flowframes/releases/latest)
+* Download the latest [release](https://github.com/AnimaFPS/flowframes/releases/latest)
 * Run Flowframes.exe
 
 or build for source
