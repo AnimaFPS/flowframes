@@ -55,17 +55,15 @@ namespace Flowframes.OS
         public static Version GetLatestVer (bool patreon)
         {
             var client = new WebClient();
-            int line = patreon ? 0 : 2;
-            return new Version(client.DownloadString(latestVerUrl).SplitIntoLines()[line]);
+            return new Version(client.DownloadString(latestVerUrl).SplitIntoLines()[2]);
         }
 
         public static string GetLatestVerLink(bool patreon)
         {
-            int line = patreon ? 1 : 3;
             var client = new WebClient();
             try
             {
-                return client.DownloadString(latestVerUrl).SplitIntoLines()[line].Trim();
+                return client.DownloadString(latestVerUrl).SplitIntoLines()[3].Trim();
             }
             catch
             {
@@ -126,10 +124,8 @@ namespace Flowframes.OS
         public static async Task AsyncUpdateCheck ()
         {
             Version installed = GetInstalledVer();
-            Version latestPat = GetLatestVer(true);
-            Version latestFree = GetLatestVer(false);
 
-            Logger.Log($"You are running Flowframes {installed}. The latest Patreon version is {latestPat}, the latest free version is {latestFree}.");
+            Logger.Log($"You are running Flowframes {installed}.");
         }
     }
 }

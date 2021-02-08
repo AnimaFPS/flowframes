@@ -60,7 +60,6 @@ namespace Flowframes
             try
             {
                 GetWebInfo.LoadNews(newsLabel);
-                GetWebInfo.LoadPatronListCsv(patronsLabel);
                 Updater.AsyncUpdateCheck();
                 Python.CheckCompression();
             }
@@ -367,21 +366,6 @@ namespace Flowframes
         {
             SetTab("interpolation");
             Interpolate.Cancel();
-        }
-
-        private void discordBtn_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://discord.gg/eJHD2NSJRe");
-        }
-
-        private void paypalBtn_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://www.paypal.com/paypalme/nmkd/10");
-        }
-
-        private void patreonBtn_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://patreon.com/n00mkrad");
         }
 
         private void settingsBtn_Click(object sender, EventArgs e)

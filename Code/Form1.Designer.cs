@@ -73,7 +73,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.statusLabel = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.updateBtn = new HTAlt.WinForms.HTButton();
             this.queueBtn = new HTAlt.WinForms.HTButton();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -82,19 +81,12 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.settingsBtn = new HTAlt.WinForms.HTButton();
-            this.patreonBtn = new HTAlt.WinForms.HTButton();
-            this.paypalBtn = new HTAlt.WinForms.HTButton();
-            this.discordBtn = new HTAlt.WinForms.HTButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.longProgBar = new HTAlt.WinForms.HTProgressBar();
             this.cancelBtn = new System.Windows.Forms.Button();
             this.mainTabControl = new HTAlt.WinForms.HTTabControl();
             this.welcomeTab = new System.Windows.Forms.TabPage();
             this.welcomeLabel2 = new System.Windows.Forms.Label();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.patronsLabel = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.newsLabel = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -112,9 +104,9 @@
             this.label22 = new System.Windows.Forms.Label();
             this.previewPicturebox = new System.Windows.Forms.PictureBox();
             this.abtTab = new System.Windows.Forms.TabPage();
-            this.htButton1 = new HTAlt.WinForms.HTButton();
             this.runStepBtn = new System.Windows.Forms.Button();
             this.stepSelector = new System.Windows.Forms.ComboBox();
+            this.longProgBar = new HTAlt.WinForms.HTProgressBar();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -123,7 +115,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.mainTabControl.SuspendLayout();
             this.welcomeTab.SuspendLayout();
-            this.panel8.SuspendLayout();
             this.panel6.SuspendLayout();
             this.interpOptsTab.SuspendLayout();
             this.videoUtilsTab.SuspendLayout();
@@ -644,24 +635,6 @@
             this.statusLabel.TabIndex = 7;
             this.statusLabel.Text = "Ready";
             // 
-            // updateBtn
-            // 
-            this.updateBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.updateBtn.ButtonImage = global::Flowframes.Properties.Resources.baseline_system_update_alt_white_48dp;
-            this.updateBtn.DrawImage = true;
-            this.updateBtn.FlatAppearance.BorderSize = 0;
-            this.updateBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.updateBtn.ForeColor = System.Drawing.Color.White;
-            this.updateBtn.ImageIndex = 0;
-            this.updateBtn.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.Zoom;
-            this.updateBtn.Location = new System.Drawing.Point(790, 12);
-            this.updateBtn.Name = "updateBtn";
-            this.updateBtn.Size = new System.Drawing.Size(40, 40);
-            this.updateBtn.TabIndex = 41;
-            this.toolTip1.SetToolTip(this.updateBtn, "Update");
-            this.updateBtn.UseVisualStyleBackColor = false;
-            this.updateBtn.Click += new System.EventHandler(this.updateBtn_Click);
-            // 
             // queueBtn
             // 
             this.queueBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
@@ -762,60 +735,6 @@
             this.settingsBtn.UseVisualStyleBackColor = false;
             this.settingsBtn.Click += new System.EventHandler(this.settingsBtn_Click);
             // 
-            // patreonBtn
-            // 
-            this.patreonBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.patreonBtn.ButtonImage = global::Flowframes.Properties.Resources.patreon256pxColored;
-            this.patreonBtn.DrawImage = true;
-            this.patreonBtn.FlatAppearance.BorderSize = 0;
-            this.patreonBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.patreonBtn.ForeColor = System.Drawing.Color.White;
-            this.patreonBtn.ImageIndex = 0;
-            this.patreonBtn.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.Zoom;
-            this.patreonBtn.Location = new System.Drawing.Point(652, 12);
-            this.patreonBtn.Name = "patreonBtn";
-            this.patreonBtn.Size = new System.Drawing.Size(40, 40);
-            this.patreonBtn.TabIndex = 37;
-            this.toolTip1.SetToolTip(this.patreonBtn, "Donate on Patreon :)");
-            this.patreonBtn.UseVisualStyleBackColor = false;
-            this.patreonBtn.Click += new System.EventHandler(this.patreonBtn_Click);
-            // 
-            // paypalBtn
-            // 
-            this.paypalBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.paypalBtn.ButtonImage = global::Flowframes.Properties.Resources.paypal256px;
-            this.paypalBtn.DrawImage = true;
-            this.paypalBtn.FlatAppearance.BorderSize = 0;
-            this.paypalBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.paypalBtn.ForeColor = System.Drawing.Color.White;
-            this.paypalBtn.ImageIndex = 0;
-            this.paypalBtn.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.Zoom;
-            this.paypalBtn.Location = new System.Drawing.Point(605, 12);
-            this.paypalBtn.Name = "paypalBtn";
-            this.paypalBtn.Size = new System.Drawing.Size(40, 40);
-            this.paypalBtn.TabIndex = 36;
-            this.toolTip1.SetToolTip(this.paypalBtn, "Donate :)");
-            this.paypalBtn.UseVisualStyleBackColor = false;
-            this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
-            // 
-            // discordBtn
-            // 
-            this.discordBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.discordBtn.ButtonImage = global::Flowframes.Properties.Resources.discordIcoColored;
-            this.discordBtn.DrawImage = true;
-            this.discordBtn.FlatAppearance.BorderSize = 0;
-            this.discordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.discordBtn.ForeColor = System.Drawing.Color.White;
-            this.discordBtn.ImageIndex = 0;
-            this.discordBtn.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.Zoom;
-            this.discordBtn.Location = new System.Drawing.Point(698, 12);
-            this.discordBtn.Name = "discordBtn";
-            this.discordBtn.Size = new System.Drawing.Size(40, 40);
-            this.discordBtn.TabIndex = 35;
-            this.toolTip1.SetToolTip(this.discordBtn, "Chat on Discord");
-            this.discordBtn.UseVisualStyleBackColor = false;
-            this.discordBtn.Click += new System.EventHandler(this.discordBtn_Click);
-            // 
             // pictureBox1
             // 
             this.pictureBox1.BackgroundImage = global::Flowframes.Properties.Resources.questmark_72px_bordeer;
@@ -839,15 +758,6 @@
             this.pictureBox2.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBox2, "Set your interpolation output format.\r\nEncoding and quality options can be change" +
         "d in the Settings.");
-            // 
-            // longProgBar
-            // 
-            this.longProgBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.longProgBar.BorderThickness = 0;
-            this.longProgBar.Location = new System.Drawing.Point(221, 474);
-            this.longProgBar.Name = "longProgBar";
-            this.longProgBar.Size = new System.Drawing.Size(700, 15);
-            this.longProgBar.TabIndex = 33;
             // 
             // cancelBtn
             // 
@@ -902,7 +812,6 @@
             // 
             this.welcomeTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.welcomeTab.Controls.Add(this.welcomeLabel2);
-            this.welcomeTab.Controls.Add(this.panel8);
             this.welcomeTab.Controls.Add(this.panel6);
             this.welcomeTab.Controls.Add(this.label11);
             this.welcomeTab.Location = new System.Drawing.Point(4, 27);
@@ -925,40 +834,6 @@
             this.welcomeLabel2.Text = "Click The Interpolation Tab To Begin.";
             this.welcomeLabel2.Click += new System.EventHandler(this.welcomeLabel2_Click);
             // 
-            // panel8
-            // 
-            this.panel8.AutoScroll = true;
-            this.panel8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.panel8.Controls.Add(this.patronsLabel);
-            this.panel8.Controls.Add(this.label21);
-            this.panel8.Location = new System.Drawing.Point(593, 57);
-            this.panel8.Margin = new System.Windows.Forms.Padding(5);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(300, 193);
-            this.panel8.TabIndex = 4;
-            // 
-            // patronsLabel
-            // 
-            this.patronsLabel.AutoSize = true;
-            this.patronsLabel.ForeColor = System.Drawing.Color.White;
-            this.patronsLabel.Location = new System.Drawing.Point(8, 31);
-            this.patronsLabel.Margin = new System.Windows.Forms.Padding(8, 8, 3, 0);
-            this.patronsLabel.Name = "patronsLabel";
-            this.patronsLabel.Size = new System.Drawing.Size(0, 15);
-            this.patronsLabel.TabIndex = 9;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.ForeColor = System.Drawing.Color.White;
-            this.label21.Location = new System.Drawing.Point(8, 8);
-            this.label21.Margin = new System.Windows.Forms.Padding(8, 8, 3, 0);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(119, 15);
-            this.label21.TabIndex = 8;
-            this.label21.Text = "Patreon Supporters:";
-            // 
             // panel6
             // 
             this.panel6.AutoScroll = true;
@@ -968,7 +843,7 @@
             this.panel6.Location = new System.Drawing.Point(8, 57);
             this.panel6.Margin = new System.Windows.Forms.Padding(5);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(575, 193);
+            this.panel6.Size = new System.Drawing.Size(885, 193);
             this.panel6.TabIndex = 3;
             // 
             // newsLabel
@@ -1210,23 +1085,6 @@
             this.abtTab.TabIndex = 2;
             this.abtTab.Text = "About";
             // 
-            // htButton1
-            // 
-            this.htButton1.BackColor = System.Drawing.Color.Transparent;
-            this.htButton1.ButtonImage = global::Flowframes.Properties.Resources.separatorTest1;
-            this.htButton1.DrawImage = true;
-            this.htButton1.Enabled = false;
-            this.htButton1.FlatAppearance.BorderSize = 0;
-            this.htButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.htButton1.ForeColor = System.Drawing.Color.White;
-            this.htButton1.ImageIndex = 0;
-            this.htButton1.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.Zoom;
-            this.htButton1.Location = new System.Drawing.Point(744, 12);
-            this.htButton1.Name = "htButton1";
-            this.htButton1.Size = new System.Drawing.Size(40, 40);
-            this.htButton1.TabIndex = 40;
-            this.htButton1.UseVisualStyleBackColor = false;
-            // 
             // runStepBtn
             // 
             this.runStepBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1262,6 +1120,15 @@
             this.stepSelector.Size = new System.Drawing.Size(203, 24);
             this.stepSelector.TabIndex = 73;
             // 
+            // longProgBar
+            // 
+            this.longProgBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.longProgBar.BorderThickness = 0;
+            this.longProgBar.Location = new System.Drawing.Point(221, 474);
+            this.longProgBar.Name = "longProgBar";
+            this.longProgBar.Size = new System.Drawing.Size(700, 15);
+            this.longProgBar.TabIndex = 33;
+            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -1273,14 +1140,9 @@
             this.Controls.Add(this.runBtn);
             this.Controls.Add(this.stepSelector);
             this.Controls.Add(this.runStepBtn);
-            this.Controls.Add(this.updateBtn);
-            this.Controls.Add(this.htButton1);
             this.Controls.Add(this.queueBtn);
             this.Controls.Add(this.mainTabControl);
             this.Controls.Add(this.settingsBtn);
-            this.Controls.Add(this.patreonBtn);
-            this.Controls.Add(this.paypalBtn);
-            this.Controls.Add(this.discordBtn);
             this.Controls.Add(this.longProgBar);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.logBox);
@@ -1306,8 +1168,6 @@
             this.mainTabControl.ResumeLayout(false);
             this.welcomeTab.ResumeLayout(false);
             this.welcomeTab.PerformLayout();
-            this.panel8.ResumeLayout(false);
-            this.panel8.PerformLayout();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
             this.interpOptsTab.ResumeLayout(false);
@@ -1373,11 +1233,7 @@
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.ComboBox utilsConvCrf;
         private System.Windows.Forms.Label label24;
-        private HTAlt.WinForms.HTProgressBar longProgBar;
         private System.Windows.Forms.Button cancelBtn;
-        private HTAlt.WinForms.HTButton discordBtn;
-        private HTAlt.WinForms.HTButton paypalBtn;
-        private HTAlt.WinForms.HTButton patreonBtn;
         private HTAlt.WinForms.HTButton settingsBtn;
         private System.Windows.Forms.TabPage interpOptsTab;
         private System.Windows.Forms.TabPage videoUtilsTab;
@@ -1389,20 +1245,15 @@
         private System.Windows.Forms.PictureBox previewPicturebox;
         public HTAlt.WinForms.HTTabControl mainTabControl;
         private HTAlt.WinForms.HTButton queueBtn;
-        private HTAlt.WinForms.HTButton htButton1;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.CheckBox utilsExtractAudioCbox;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
-        private HTAlt.WinForms.HTButton updateBtn;
         private System.Windows.Forms.TabPage welcomeTab;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Panel panel8;
-        private System.Windows.Forms.Label patronsLabel;
-        private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label newsLabel;
         private System.Windows.Forms.Label welcomeLabel2;
         private System.Windows.Forms.Button runStepBtn;
@@ -1410,6 +1261,7 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label inputInfo;
         private System.Windows.Forms.Label label1;
+        private HTAlt.WinForms.HTProgressBar longProgBar;
     }
 }
 
