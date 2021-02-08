@@ -1,44 +1,15 @@
 # Flowframes - Windows GUI for Video Interpolation
 Flowframes Windows GUI for video interpolation - Supports DAIN NCNN as well as RIFE Pytorch and NCNN implementations.
 
-Flowframes is **open-source donationware**. Builds are released for free on itch after an early-access period on Patreon. This repo's code is complete and does not "paywall" experienced users who want to compile the program themselves.
-
-However, **I do not provide support for self-built versions** as I can't guarantee that the code of this repo is stable at any given moment. Refer to the releases if you want to get the most stable source code.
 
 ![img](https://i.imgur.com/HHZxUYo.png)
 
 ## Installation
 
-* Download on [itch](https://nmkd.itch.io/flowframes) or, for the most recent beta versions, on [Patreon](https://www.patreon.com/n00mkrad). This repo does not provide builds.
+* Download the latest [release](https://github.com/flowframes/releases/latest)
 * Run Flowframes.exe
 
-Starting with 1.18, the installer has been removed, and Flowframes is instead distributed as an all-in-one archive. Download the "Full" file if you are using a Maxwell/Pascal/Turing GPU and want to use embedded Pytorch, or "Full-RTX3000" if you have an Ampere GPU. Use "NoPython"/"Slim" if you run an AMD GPU or want to use your system Python/Pytorch installation.
-
-
-
-## Using A Pytorch Implementation
-
-Flowframes comes with RIFE-NCNN which runs on Tencent's NCNN framework, which allows it to run on any modern (Vulkan-capable) GPU.
-
-However, the official RIFE implementation run best via its original Pytorch implementation.
-
-The requirements to run these are the following:
-
-* A **modern Nvidia GPU** (750 Ti, 900/1000/1600/2000/3000 Series).
-* A **Python** installation including Pytorch (1.5 or later) as well as the packages `opencv-python` and `imageio`.
-  * The python runtime with pytorch is included in the Flowframes "Full" and "Full-RTX3000" downloads.
-
-[More Details On Python Dependencies](PythonDependencies.md)
-
-
-
-## Running A Pytorch Implementation on Nvidia Ampere GPUs
-
-The python runtime included in the "Full-RTX3000" package includes support for Ampere GPUs. If you want to use your own installation, [use Pytorch 1.7.1](https://pytorch.org/get-started/locally/) or newer on Python 3.8.x.
-
-Important: Ampere GPUs perform worse than they should on cuDNN 8.04 and older. If your cuDNN version is not >=8.05, you can manually update it by downloading it from Nvidia and replacing the DLLs in the torch folder. The embedded runtime already includes those files.
-
-
+or build for source
 
 ## Configuration
 
