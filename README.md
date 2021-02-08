@@ -2,7 +2,7 @@
 Flowframes Windows GUI for video interpolation - Supports DAIN NCNN as well as RIFE Pytorch and NCNN implementations.
 
 
-![img](https://i.imgur.com/HHZxUYo.png)
+![img](/Media/flowframes_gui.png)
 
 ## Installation
 
