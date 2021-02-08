@@ -73,6 +73,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.statusLabel = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.updateBtn = new HTAlt.WinForms.HTButton();
             this.queueBtn = new HTAlt.WinForms.HTButton();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -83,6 +84,7 @@
             this.settingsBtn = new HTAlt.WinForms.HTButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.longProgBar = new HTAlt.WinForms.HTProgressBar();
             this.cancelBtn = new System.Windows.Forms.Button();
             this.mainTabControl = new HTAlt.WinForms.HTTabControl();
             this.welcomeTab = new System.Windows.Forms.TabPage();
@@ -106,7 +108,6 @@
             this.abtTab = new System.Windows.Forms.TabPage();
             this.runStepBtn = new System.Windows.Forms.Button();
             this.stepSelector = new System.Windows.Forms.ComboBox();
-            this.longProgBar = new HTAlt.WinForms.HTProgressBar();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -635,6 +636,24 @@
             this.statusLabel.TabIndex = 7;
             this.statusLabel.Text = "Ready";
             // 
+            // updateBtn
+            // 
+            this.updateBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.updateBtn.ButtonImage = global::Flowframes.Properties.Resources.baseline_system_update_alt_white_48dp;
+            this.updateBtn.DrawImage = true;
+            this.updateBtn.FlatAppearance.BorderSize = 0;
+            this.updateBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.updateBtn.ForeColor = System.Drawing.Color.White;
+            this.updateBtn.ImageIndex = 0;
+            this.updateBtn.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.Zoom;
+            this.updateBtn.Location = new System.Drawing.Point(790, 12);
+            this.updateBtn.Name = "updateBtn";
+            this.updateBtn.Size = new System.Drawing.Size(40, 40);
+            this.updateBtn.TabIndex = 41;
+            this.toolTip1.SetToolTip(this.updateBtn, "Update");
+            this.updateBtn.UseVisualStyleBackColor = false;
+            this.updateBtn.Click += new System.EventHandler(this.updateBtn_Click);
+            // 
             // queueBtn
             // 
             this.queueBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
@@ -758,6 +777,15 @@
             this.pictureBox2.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBox2, "Set your interpolation output format.\r\nEncoding and quality options can be change" +
         "d in the Settings.");
+            // 
+            // longProgBar
+            // 
+            this.longProgBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.longProgBar.BorderThickness = 0;
+            this.longProgBar.Location = new System.Drawing.Point(221, 474);
+            this.longProgBar.Name = "longProgBar";
+            this.longProgBar.Size = new System.Drawing.Size(700, 15);
+            this.longProgBar.TabIndex = 33;
             // 
             // cancelBtn
             // 
@@ -1120,15 +1148,6 @@
             this.stepSelector.Size = new System.Drawing.Size(203, 24);
             this.stepSelector.TabIndex = 73;
             // 
-            // longProgBar
-            // 
-            this.longProgBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.longProgBar.BorderThickness = 0;
-            this.longProgBar.Location = new System.Drawing.Point(221, 474);
-            this.longProgBar.Name = "longProgBar";
-            this.longProgBar.Size = new System.Drawing.Size(700, 15);
-            this.longProgBar.TabIndex = 33;
-            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -1140,6 +1159,7 @@
             this.Controls.Add(this.runBtn);
             this.Controls.Add(this.stepSelector);
             this.Controls.Add(this.runStepBtn);
+            this.Controls.Add(this.updateBtn);
             this.Controls.Add(this.queueBtn);
             this.Controls.Add(this.mainTabControl);
             this.Controls.Add(this.settingsBtn);
@@ -1233,6 +1253,7 @@
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.ComboBox utilsConvCrf;
         private System.Windows.Forms.Label label24;
+        private HTAlt.WinForms.HTProgressBar longProgBar;
         private System.Windows.Forms.Button cancelBtn;
         private HTAlt.WinForms.HTButton settingsBtn;
         private System.Windows.Forms.TabPage interpOptsTab;
@@ -1250,6 +1271,7 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
+        private HTAlt.WinForms.HTButton updateBtn;
         private System.Windows.Forms.TabPage welcomeTab;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Panel panel6;
@@ -1261,7 +1283,6 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label inputInfo;
         private System.Windows.Forms.Label label1;
-        private HTAlt.WinForms.HTProgressBar longProgBar;
     }
 }
 

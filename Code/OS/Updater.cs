@@ -52,24 +52,10 @@ namespace Flowframes.OS
             return VersionCompareResult.Equal;
         }
 
-        public static Version GetLatestVer (bool patreon)
+        public static Version GetLatestVer()
         {
             var client = new WebClient();
-            return new Version(client.DownloadString(latestVerUrl).SplitIntoLines()[2]);
-        }
-
-        public static string GetLatestVerLink(bool patreon)
-        {
-            var client = new WebClient();
-            try
-            {
-                return client.DownloadString(latestVerUrl).SplitIntoLines()[3].Trim();
-            }
-            catch
-            {
-                Logger.Log("Failed to get latest version link from ver.ini!", true);
-                return "";
-            }
+            return new Version(client.DownloadString(latestVerUrl).SplitIntoLines()[0]);
         }
 
         public static async Task UpdateTo (int version, UpdaterForm form = null)

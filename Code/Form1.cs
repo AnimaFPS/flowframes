@@ -118,7 +118,7 @@ namespace Flowframes
         public float currInFps;
         public int currInFrames;
         public long currInDuration;
-        public void UpdateInputInfo ()
+        public void UpdateInputInfo()
         {
             string str = $"Resolution: {(!currInRes.IsEmpty ? $"{currInRes.Width}x{currInRes.Height}" : "Unknown")} - ";
             str += $"Framerate: {(currInFps > 0f ? $"{currInFps.ToStringDot()} FPS" : "Unknown")} - ";
@@ -127,7 +127,7 @@ namespace Flowframes
             inputInfo.Text = str;
         }
 
-        public void ResetInputInfo ()
+        public void ResetInputInfo()
         {
             currInRes = new Size();
             currInFps = 0;
@@ -204,7 +204,7 @@ namespace Flowframes
         public void SetOutMode(Interpolate.OutMode mode)
         {
             int theIndex = 0;
-            for(int i = 0; i < outModeCombox.Items.Count; i++)
+            for (int i = 0; i < outModeCombox.Items.Count; i++)
             {
                 string currentItem = outModeCombox.Items[i].ToString().ToLower();
                 if (mode == Interpolate.OutMode.VidMkv && currentItem.Contains("mkv")) theIndex = i;
@@ -284,7 +284,7 @@ namespace Flowframes
             if (string.IsNullOrWhiteSpace(aiCombox.Text) || aiCombox.Text == lastAiComboxStr) return;
             lastAiComboxStr = aiCombox.Text;
             aiModel = UIUtils.FillAiModelsCombox(aiModel, GetAi());
-            if(initialized)
+            if (initialized)
                 ConfigParser.SaveComboxIndex(aiCombox);
             interpFactorCombox_SelectedIndexChanged(null, null);
         }
@@ -366,6 +366,21 @@ namespace Flowframes
         {
             SetTab("interpolation");
             Interpolate.Cancel();
+        }
+
+        private void discordBtn_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://discord.gg/eJHD2NSJRe");
+        }
+
+        private void paypalBtn_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.paypal.com/paypalme/nmkd/10");
+        }
+
+        private void patreonBtn_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://patreon.com/n00mkrad");
         }
 
         private void settingsBtn_Click(object sender, EventArgs e)
