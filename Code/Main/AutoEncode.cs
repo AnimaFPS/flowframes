@@ -49,7 +49,7 @@ namespace Flowframes.Main
 
                 Logger.Log($"[AutoEnc] Starting AutoEncode MainLoop - Chunk Size: {chunkSize} Frames - Safety Buffer: {safetyBufferFrames} Frames", true);
                 int videoIndex = 1;
-                string encFile = Path.Combine(interpFramesPath.GetParentDir(), $"vfr-{Interpolate.current.interpFactor}x.ini");
+                string encFile = Path.Combine(interpFramesPath.GetParentDir(), Paths.GetFrameOrderFilename(Interpolate.current.interpFactor));
                 interpFramesLines = IOUtils.ReadLines(encFile).Select(x => x.Split('/').Last().Remove("'").Split('#').First()).ToArray();     // Array with frame filenames
 
                 while (!Interpolate.canceled && GetInterpFramesAmount() < 2)
@@ -78,7 +78,6 @@ namespace Flowframes.Main
                     if (unencodedFrameLines.Count > 0 && (unencodedFrameLines.Count >= (chunkSize + safetyBufferFrames) || !aiRunning))     // Encode every n frames, or after process has exited
                     {
                         List<int> frameLinesToEncode = aiRunning ? unencodedFrameLines.Take(chunkSize).ToList() : unencodedFrameLines;     // Take all remaining frames if process is done
-
                         string lastOfChunk = Path.Combine(interpFramesPath, interpFramesLines[frameLinesToEncode.Last()]);
 
                         if (!File.Exists(lastOfChunk))

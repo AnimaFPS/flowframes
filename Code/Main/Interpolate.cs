@@ -49,7 +49,7 @@ namespace Flowframes
                 await GetFrames();
                 if (canceled) return;
                 sw.Restart();
-                await PostProcessFrames();
+                await PostProcessFrames(false);
             }
 
             if (canceled) return;
@@ -69,12 +69,12 @@ namespace Flowframes
             Program.mainForm.SetStatus("Done interpolating!");
         }
 
-        public static async Task GetFrames ()
+        public static async Task GetFrames (bool stepByStep = false)
         {
             current.RefreshAlpha();
 
-            if (!current.inputIsFrames)        // Input is video - extract frames first
-                await ExtractFrames(current.inPath, current.framesFolder, current.alpha);
+            if (!current.inputIsFrames)        // Extract if input is video, import if image sequence
+                await ExtractFrames(current.inPath, current.framesFolder, current.alpha, !stepByStep);
             else
                 await FfmpegExtract.ImportImages(current.inPath, current.framesFolder, current.alpha, await Utils.GetOutputResolution(current.inPath, true));
 
@@ -88,9 +88,9 @@ namespace Flowframes
             }
         }
 
-        public static async Task ExtractFrames(string inPath, string outPath, bool alpha, bool extractAudio = true)
+        public static async Task ExtractFrames(string inPath, string outPath, bool alpha, bool sceneDetect)
         {
-            if (Config.GetBool("scnDetect"))
+            if (sceneDetect && Config.GetBool("scnDetect"))
             {
                 Program.mainForm.SetStatus("Extracting scenes from video...");
                 await FfmpegExtract.ExtractSceneChanges(inPath, Path.Combine(current.tempFolder, Paths.scenesDir), current.inFps);
@@ -100,7 +100,7 @@ namespace Flowframes
             if (canceled) return;
             Program.mainForm.SetStatus("Extracting frames from video...");
             bool mpdecimate = Config.GetInt("dedupMode") == 2;
-            await FfmpegExtract.VideoToFrames(inPath, outPath, alpha, current.inFps, mpdecimate, false, await Utils.GetOutputResolution(inPath, true, true), false);
+            await FfmpegExtract.VideoToFrames(inPath, outPath, alpha, current.inFps, mpdecimate, false, await Utils.GetOutputResolution(inPath, true, true));
 
             if (mpdecimate)
             {
@@ -114,21 +114,19 @@ namespace Flowframes
             if(!Config.GetBool("allowConsecutiveSceneChanges", true))
                 Utils.FixConsecutiveSceneFrames(Path.Combine(current.tempFolder, Paths.scenesDir), current.framesFolder);
 
-            if (extractAudio)
-            {
-                if (canceled) return;
-                Program.mainForm.SetStatus("Extracting audio from video...");
-                string audioFile = Path.Combine(current.tempFolder, "audio");
-                if (audioFile != null && !File.Exists(audioFile))
-                    await FfmpegAudioAndMetadata.ExtractAudio(inPath, audioFile);
-            }
+            if (canceled) return;
+            Program.mainForm.SetStatus("Extracting audio from video...");
+            string audioFile = Path.Combine(current.tempFolder, "audio");
+
+            if (audioFile != null && !File.Exists(audioFile))
+                await FfmpegAudioAndMetadata.ExtractAudio(inPath, audioFile);
 
             if (canceled) return;
             Program.mainForm.SetStatus("Extracting subtitles from video...");
             await FfmpegAudioAndMetadata.ExtractSubtitles(inPath, current.tempFolder, current.outMode);
         }
 
-        public static async Task PostProcessFrames (bool sbsMode = false)
+        public static async Task PostProcessFrames (bool stepByStep)
         {
             if (canceled) return;
 
@@ -160,16 +158,16 @@ namespace Flowframes
 
             try
             {
-                Dictionary<string, string> renamedFilesDict = IOUtils.RenameCounterDirReversible(current.framesFolder, "png", 1, Padding.inputFramesRenamed);
-                AiProcess.filenameMap = renamedFilesDict.ToDictionary(x => Path.GetFileName(x.Key), x => Path.GetFileName(x.Value));    // Save rel paths
+                Dictionary<string, string> renamedFilesDict = await IOUtils.RenameCounterDirReversibleAsync(current.framesFolder, "png", 1, Padding.inputFramesRenamed);
+                
+                if(stepByStep)
+                    AiProcess.filenameMap = renamedFilesDict.ToDictionary(x => Path.GetFileName(x.Key), x => Path.GetFileName(x.Value));    // Save rel paths
             }
             catch (Exception e)
             {
                 Logger.Log($"Error renaming frame files: {e.Message}");
                 Cancel("Error renaming frame files. Check the log for details.");
             }
-
-            if (canceled) return;
         }
 
         public static async Task RunAi(string outpath, AI ai, bool stepByStep = false)
@@ -207,11 +205,14 @@ namespace Flowframes
         {
             if (AiProcess.currentAiProcess != null && !AiProcess.currentAiProcess.HasExited)
                 OSUtils.KillProcessTree(AiProcess.currentAiProcess.Id);
+
             if (AvProcess.lastProcess != null && !AvProcess.lastProcess.HasExited)
                 OSUtils.KillProcessTree(AvProcess.lastProcess.Id);
+
             canceled = true;
             Program.mainForm.SetStatus("Canceled.");
             Program.mainForm.SetProgress(0);
+
             if (!current.stepByStep && !Config.GetBool("keepTempFolder"))
             {
                 if(false /* IOUtils.GetAmountOfFiles(Path.Combine(current.tempFolder, Paths.resumeDir), true) > 0 */)   // TODO: Uncomment for 1.23
@@ -225,10 +226,12 @@ namespace Flowframes
                     IOUtils.TryDeleteIfExists(current.tempFolder);
                 }
             }
+
             AutoEncode.busy = false;
             Program.mainForm.SetWorking(false);
             Program.mainForm.SetTab("interpolation");
             Logger.LogIfLastLineDoesNotContainMsg("Canceled interpolation.");
+
             if (!string.IsNullOrWhiteSpace(reason) && !noMsgBox)
                 Utils.ShowMessage($"Canceled:\n\n{reason}");
         }

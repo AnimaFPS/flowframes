@@ -19,7 +19,7 @@ namespace Flowframes.UI
         {
             string outPath = Path.ChangeExtension(videoPath, null) + "-extracted";
             Program.mainForm.SetWorking(true);
-            await FfmpegExtract.VideoToFrames(videoPath, Path.Combine(outPath, Paths.framesDir), false, Interpolate.current.inFps, false, false, false);
+            await FfmpegExtract.VideoToFrames(videoPath, Path.Combine(outPath, Paths.framesDir), false, Interpolate.current.inFps, false, false);
             File.WriteAllText(Path.Combine(outPath, "fps.ini"), Interpolate.current.inFps.ToString());
             if (withAudio)
                 await FfmpegAudioAndMetadata.ExtractAudio(videoPath, Path.Combine(outPath, "audio"));
@@ -98,7 +98,7 @@ namespace Flowframes.UI
                 await Task.Delay(10);
                 framesPath = Path.ChangeExtension(inPath, null) + "-frames";
                 Directory.CreateDirectory(framesPath);
-                await Interpolate.ExtractFrames(inPath, framesPath, false);
+                await Interpolate.ExtractFrames(inPath, framesPath, false, false);
             }
             else
             {
