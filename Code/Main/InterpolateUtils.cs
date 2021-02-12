@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using i = Flowframes.Interpolate;
+using I = Flowframes.Interpolate;
 using Padding = Flowframes.Data.Padding;
 
 namespace Flowframes.Main
@@ -29,20 +29,20 @@ namespace Flowframes.Main
             try
             {
                 lastFrameNum--;     // We have to do this as extracted frames start at 0, not 1
-                bool frameFolderInput = IOUtils.IsPathDirectory(i.current.inPath);
-                string targetPath = Path.Combine(i.current.framesFolder, lastFrameNum.ToString().PadLeft(Padding.inputFrames, '0') + ".png");
+                bool frameFolderInput = IOUtils.IsPathDirectory(I.current.inPath);
+                string targetPath = Path.Combine(I.current.framesFolder, lastFrameNum.ToString().PadLeft(Padding.inputFrames, '0') + ".png");
                 if (File.Exists(targetPath)) return;
 
-                Size res = IOUtils.GetImage(IOUtils.GetFilesSorted(i.current.framesFolder, false).First()).Size;
+                Size res = IOUtils.GetImage(IOUtils.GetFilesSorted(I.current.framesFolder, false).First()).Size;
 
                 if (frameFolderInput)
                 {
-                    string lastFramePath = IOUtils.GetFilesSorted(i.current.inPath, false).Last();
+                    string lastFramePath = IOUtils.GetFilesSorted(I.current.inPath, false).Last();
                     await FfmpegExtract.ExtractLastFrame(lastFramePath, targetPath, res);
                 }
                 else
                 {
-                    await FfmpegExtract.ExtractLastFrame(i.current.inPath, targetPath, res);
+                    await FfmpegExtract.ExtractLastFrame(I.current.inPath, targetPath, res);
                 }
             }
             catch (Exception e)
@@ -59,11 +59,13 @@ namespace Flowframes.Main
             return dotStr + "png";
         }
 
+        public static int lastFrame;
         public static int targetFrames;
         public static string currentOutdir;
         public static float currentFactor;
         public static bool progressPaused = false;
         public static bool progCheckRunning = false;
+
         public static async void GetProgressByFrameAmount(string outdir, int target)
         {
             progCheckRunning = true;
@@ -72,36 +74,54 @@ namespace Flowframes.Main
             Logger.Log($"Starting GetProgressByFrameAmount() loop for outdir '{currentOutdir}', target is {target} frames", true);
             bool firstProgUpd = true;
             Program.mainForm.SetProgress(0);
+            lastFrame = 0;
             while (Program.busy)
             {
                 if (!progressPaused && AiProcess.processTime.IsRunning && Directory.Exists(currentOutdir))
                 {
                     if (firstProgUpd && Program.mainForm.IsInFocus())
                         Program.mainForm.SetTab("preview");
+
                     firstProgUpd = false;
-                    string[] frames = IOUtils.GetFilesSorted(currentOutdir, $"*.{GetOutExt()}");
-                    if (frames.Length > 1)
-                        UpdateInterpProgress(frames.Length, targetFrames, frames[frames.Length - 1]);
-                    if (frames.Length >= targetFrames)
-                        break;
-                    await Task.Delay(GetProgressWaitTime(frames.Length));
-                }
-                else
-                {
+                    string lastFramePath = currentOutdir + "\\" + lastFrame.ToString("00000000") + $".{GetOutExt()}";
+
+                    if (lastFrame > 1)
+                        UpdateInterpProgress(lastFrame, targetFrames, lastFramePath);
+
                     await Task.Delay(200);
+
+                    if (lastFrame >= targetFrames)
+                        break;
                 }
+
+                await Task.Delay(100);
             }
             progCheckRunning = false;
-            if (i.canceled)
+            if (I.canceled)
                 Program.mainForm.SetProgress(0);
+        }
+
+        public static void UpdateLastFrameFromInterpOutput(string output)
+        {
+            try
+            {
+                string ncnnStr = I.current.ai.aiName.Contains("NCNN") ? " done" : "";
+                Regex frameRegex = new Regex($@"(?<=.)\d*(?=.{GetOutExt()}{ncnnStr})");
+                if (!frameRegex.IsMatch(output)) return;
+                lastFrame = Math.Max(int.Parse(frameRegex.Match(output).Value), lastFrame);
+            }
+            catch
+            {
+                Logger.Log($"UpdateLastFrameFromInterpOutput: Failed to get progress from '{output}' even though Regex matched!");
+            }
         }
 
         public static int interpolatedInputFramesCount;
 
         public static void UpdateInterpProgress(int frames, int target, string latestFramePath = "")
         {
-            if (i.canceled) return;
-            interpolatedInputFramesCount = ((frames / i.current.interpFactor).RoundToInt() - 1);
+            if (I.canceled) return;
+            interpolatedInputFramesCount = ((frames / I.current.interpFactor).RoundToInt() - 1);
             ResumeUtils.Save();
             frames = frames.Clamp(0, target);
             int percent = (int)Math.Round(((float)frames / target) * 100f);
@@ -119,7 +139,7 @@ namespace Flowframes.Main
 
             bool replaceLine = Regex.Split(Logger.textbox.Text, "\r\n|\r|\n").Last().Contains("Average Speed: ");
 
-            string logStr = $"Interpolated {frames}/{target} frames ({percent}%) - Average Speed: {fpsIn} FPS In / {fpsOut} FPS Out - ";
+            string logStr = $"Interpolated {frames}/{target} Frames ({percent}%) - Average Speed: {fpsIn} FPS In / {fpsOut} FPS Out - ";
             logStr += $"Time: {FormatUtils.Time(AiProcess.processTime.Elapsed)} - ETA: {etaStr}";
             if (AutoEncode.busy) logStr += " - Encoding...";
             Logger.Log(logStr, false, replaceLine);
@@ -136,10 +156,10 @@ namespace Flowframes.Main
             catch { }
         }
 
-        public static async Task DeleteInterpolatedInputFrames ()
+        public static async Task DeleteInterpolatedInputFrames()
         {
             interpolatedInputFramesCount = 0;
-            string[] inputFrames = IOUtils.GetFilesSorted(i.current.framesFolder);
+            string[] inputFrames = IOUtils.GetFilesSorted(I.current.framesFolder);
 
             for (int i = 0; i < inputFrames.Length; i++)
             {
@@ -151,7 +171,7 @@ namespace Flowframes.Main
             }
         }
 
-        public static void SetPreviewImg (Image img)
+        public static void SetPreviewImg(Image img)
         {
             if (img == null)
                 return;
@@ -264,9 +284,9 @@ namespace Flowframes.Main
                 ShowMessage("Interpolation factor is not valid!");
                 passes = false;
             }
-            if (passes && outMode == i.OutMode.VidGif && fpsOut > 50)
+            if (passes && outMode == I.OutMode.VidGif && fpsOut > 50 && Config.GetFloat("maxFps") != 0 && Config.GetFloat("maxFps") > 50)
             {
-                ShowMessage("Invalid output frame rate!\nGIF does not properly support frame rates above 40 FPS.\nPlease use MP4, WEBM or another video format.");
+                ShowMessage("Invalid output frame rate!\nGIF does not properly support frame rates above 50 FPS.\nPlease use MP4, WEBM or another video format.");
                 passes = false;
             }
             if (passes && fpsOut < 1 || fpsOut > 1000)
@@ -275,7 +295,7 @@ namespace Flowframes.Main
                 passes = false;
             }
             if (!passes)
-                i.Cancel("Invalid settings detected.", true);
+                I.Cancel("Invalid settings detected.", true);
             return passes;
         }
 
@@ -297,7 +317,7 @@ namespace Flowframes.Main
             if (targetFrameCount > maxGifFrames)
             {
                 ShowMessage($"You can't use GIF with more than {maxGifFrames} output frames!\nPlease use MP4 for this.", "Error");
-                i.Cancel($"Can't use GIF encoding with more than {maxGifFrames} frames!");
+                I.Cancel($"Can't use GIF encoding with more than {maxGifFrames} frames!");
             }
         }
 
@@ -306,7 +326,7 @@ namespace Flowframes.Main
             if (!PkgUtils.IsAiAvailable(ai))
             {
                 ShowMessage("The selected AI is not installed!\nYou can download it from the Package Installer.", "Error");
-                i.Cancel("Selected AI not available.", true);
+                I.Cancel("Selected AI not available.", true);
                 return false;
             }
             return true;
@@ -314,10 +334,10 @@ namespace Flowframes.Main
 
         public static bool CheckDeleteOldTempFolder ()
         {
-            if (!IOUtils.TryDeleteIfExists(i.current.tempFolder))
+            if (!IOUtils.TryDeleteIfExists(I.current.tempFolder))
             {
                 ShowMessage("Failed to remove an existing temp folder of this video!\nMake sure you didn't open any frames in an editor.", "Error");
-                i.Cancel();
+                I.Cancel();
                 return false;
             }
             return true;
@@ -330,7 +350,7 @@ namespace Flowframes.Main
                 if (!IOUtils.IsDirValid(path))
                 {
                     ShowMessage("Input directory is not valid.");
-                    i.Cancel();
+                    I.Cancel();
                     return false;
                 }
             }
@@ -434,7 +454,7 @@ namespace Flowframes.Main
 
         public static async Task<bool> UseUHD ()
         {
-            return (await GetOutputResolution(i.current.inPath, false)).Height >= Config.GetInt("uhdThresh");
+            return (await GetOutputResolution(I.current.inPath, false)).Height >= Config.GetInt("uhdThresh");
         }
 
         public static void FixConsecutiveSceneFrames (string sceneFramesPath, string sourceFramesPath)

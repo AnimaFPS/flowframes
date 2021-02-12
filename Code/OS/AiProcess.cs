@@ -52,7 +52,7 @@ namespace Flowframes
                 InterpolateUtils.GetProgressByFrameAmount(interpPath, target);
         }
 
-        static async Task AiFinished (string aiName)
+        static async Task AiFinished(string aiName)
         {
             if (Interpolate.canceled) return;
             Program.mainForm.SetProgress(100);
@@ -89,6 +89,9 @@ namespace Flowframes
 
         public static async Task RunRifeCuda(string framesPath, float interpFactor, string mdl)
         {
+            if(Interpolate.currentlyUsingAutoEnc)      // Ensure AutoEnc is not paused
+                AutoEncode.paused = false;
+
             string rifeDir = Path.Combine(Paths.GetPkgPath(), Path.GetFileNameWithoutExtension(Packages.rifeCuda.fileName));
             string script = "rife.py";
 
@@ -113,6 +116,7 @@ namespace Flowframes
         public static async Task RunRifeCudaProcess (string inPath, string outDir, string script, float interpFactor, string mdl)
         {
             bool parallel = false;
+            bool unbuffered = true;
             string uhdStr = await InterpolateUtils.UseUHD() ? "--UHD" : "";
             string outPath = Path.Combine(inPath.GetParentDir(), outDir);
             string args = $" --input {inPath.Wrap()} --output {outDir} --model {mdl} --exp {(int)Math.Log(interpFactor, 2)} ";
@@ -123,7 +127,7 @@ namespace Flowframes
             AiStarted(rifePy, 3500);
             SetProgressCheck(Path.Combine(Interpolate.current.tempFolder, outDir), interpFactor);
             rifePy.StartInfo.Arguments = $"{OSUtils.GetCmdArg()} cd /D {PkgUtils.GetPkgFolder(Packages.rifeCuda).Wrap()} & " +
-                $"set CUDA_VISIBLE_DEVICES={Config.Get("torchGpus")} & {Python.GetPyCmd()} {script} {args}";
+                $"set CUDA_VISIBLE_DEVICES={Config.Get("torchGpus")} & {Python.GetPyCmd()} " + (unbuffered ? "-u" : "") + $" {script} {args}";
             Logger.Log($"Running RIFE {(await InterpolateUtils.UseUHD() ? "(UHD Mode)" : "")} ({script})...".TrimWhitespaces(), false);
             Logger.Log("cmd.exe " + rifePy.StartInfo.Arguments, true);
 
@@ -165,6 +169,8 @@ namespace Flowframes
 
             if (times > 1)
                 AutoEncode.paused = true;  // Disable autoenc until the last iteration
+            else
+                AutoEncode.paused = false;
 
             for (int iteration = 1; iteration <= times; iteration++)
             {
@@ -198,6 +204,9 @@ namespace Flowframes
             string uhdStr = await InterpolateUtils.UseUHD() ? "-u" : "";
             string ttaStr = Config.GetBool("rifeNcnnUseTta", false) ? "-x" : "";
 
+            string oldMdlName = mdl;
+            mdl = RifeNcnn2Workaround(mdl);     // TODO: REMOVE ONCE NIHUI HAS GOTTEN RID OF THE SHITTY HARDCODED VERSION CHECK
+
             rifeNcnn.StartInfo.Arguments = $"{OSUtils.GetCmdArg()} cd /D {PkgUtils.GetPkgFolder(Packages.rifeNcnn).Wrap()} & rife-ncnn-vulkan.exe " +
                 $" -v -i {inPath.Wrap()} -o {outPath.Wrap()} -m {mdl.ToLower()} {ttaStr} {uhdStr} -g {Config.Get("ncnnGpus")} -f {GetNcnnPattern()} -j {GetNcnnThreads()}";
             
@@ -218,10 +227,14 @@ namespace Flowframes
             }
 
             while (!rifeNcnn.HasExited) await Task.Delay(1);
+            RifeNcnn2Workaround(oldMdlName, true);
         }
 
         public static async Task RunDainNcnn(string framesPath, string outPath, float factor, string mdl, int tilesize)
         {
+            if (Interpolate.currentlyUsingAutoEnc)      // Ensure AutoEnc is not paused
+                AutoEncode.paused = false;
+
             await RunDainNcnnProcess(framesPath, outPath, factor, mdl, tilesize);
 
             if (!Interpolate.canceled && Interpolate.current.alpha)
@@ -326,6 +339,8 @@ namespace Flowframes
 
             if (hasShownError)
                 Interpolate.Cancel();
+
+            InterpolateUtils.UpdateLastFrameFromInterpOutput(line);
         }
 
         static string GetNcnnPattern ()
@@ -354,6 +369,28 @@ namespace Flowframes
                 progThreadsStr += $",{procThreads}";
 
             return $"4:{progThreadsStr}:4"; ;
+        }
+
+        static string RifeNcnn2Workaround (string modelName, bool reset = false)
+        {
+            if (modelName != "RIFE20") return modelName;
+            string validMdlName = "rife-v2";
+            string rifeFolderPath = Path.Combine(Paths.GetPkgPath(), Path.GetFileNameWithoutExtension(Packages.rifeNcnn.fileName));
+            string modelFolderPath = Path.Combine(rifeFolderPath, modelName);
+            string fixedModelFolderPath = Path.Combine(rifeFolderPath, validMdlName);
+
+            if (!reset)
+            {
+                IOUtils.TryDeleteIfExists(fixedModelFolderPath);
+                Directory.Move(modelFolderPath, fixedModelFolderPath);
+            }
+            else
+            {
+                IOUtils.TryDeleteIfExists(modelFolderPath);
+                Directory.Move(fixedModelFolderPath, modelFolderPath);
+            }
+
+            return validMdlName;
         }
     }
 }
