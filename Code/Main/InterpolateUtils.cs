@@ -88,13 +88,15 @@ namespace Flowframes.Main
                     if (lastFrame > 1)
                         UpdateInterpProgress(lastFrame, targetFrames, lastFramePath);
 
-                    await Task.Delay(200);
+                    await Task.Delay((target < 1000) ? 100 : 200);  // Update 10x/sec if interpolating <1k frames, otherwise 5x/sec
 
                     if (lastFrame >= targetFrames)
                         break;
                 }
-
-                await Task.Delay(100);
+                else
+                {
+                    await Task.Delay(100);
+                }
             }
             progCheckRunning = false;
             if (I.canceled)
